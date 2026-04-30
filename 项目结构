@@ -1,0 +1,7 @@
+protein_docking_agent/
+├── config.yaml                 # Agent 核心配置 + 模型选配
+├── AGENTS.md                   # OpenClaw 结构化 Agent 描述
+├── docking_tools.py            # 对接、预处理、入库工具（供 Agent 调用）
+├── docking_utils.py            # 通用工具：文件管理、PDB/配体预处理、结果解析
+├── main.py                     # Agent 启动与命令行入口
+└── requirements.txt            # Python 依赖清单
