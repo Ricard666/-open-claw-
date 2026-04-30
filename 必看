@@ -1,0 +1,18 @@
+安装 OpenClaw 环境
+git clone https://github.com/openclaw/openclaw.git
+cd openclaw
+pnpm install         # 或 npm install 
+
+配置 Python 环境
+cd protein_docking_agent/
+pip install -r requirements.txt
+# 确保系统已安装 AutoDock Vina
+# 确保 obabel、prepare_receptor4.py 可用
+
+设置 API Key
+export OPENAI_API_KEY="your-api-key"
+
+执行
+python main.py
+
+Agent 会自动按照 AGENTS.md 和 config.yaml 定义完成对接全流程
