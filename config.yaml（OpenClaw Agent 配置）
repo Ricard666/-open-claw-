@@ -1,0 +1,30 @@
+agent:
+  name: "ProteinDockingAgent"
+  description: "高通量蛋白-配体对接自动化 Agent"
+  goals:
+    - "自动批量处理蛋白-配体对接任务"
+    - "筛选高亲和力的潜在配体"
+  skills:
+    - docking_tools
+  tools:
+    - batch_docking
+    - get_top_affinity
+    - preprocess_structure
+  workflow:
+    - "接受用户配体库路径和受体文件路径"
+    - "预处理受体和配体为 PDBQT"
+    - "批量调用 AutoDock Vina 执行对接"
+    - "解析结果并入库"
+    - "自动产出 Top-N 亲和力报告"
+  constraints:
+    - "只用于学术或非商业用途"
+    - "遵循 AutoDock Vina 的许可限制"
+  output:
+    format: json
+    language: zh-CN
+
+llm:
+  provider: "openai"          # 可选: openai, anthropic, gemini, 或本地 ollama
+  model: "gpt-4"
+  api_key_env: "OPENAI_API_KEY"
+  temperature: 0.1
