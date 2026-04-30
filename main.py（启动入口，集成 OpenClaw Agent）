@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+"""
+main.py
+   - 初始化 OpenClaw Agent
+   - 注册 DockingTools
+   - 启动循环监听或 CLI 模式
+"""
+
+import os
+import yaml
+from openclaw import Agent, ToolRegistry, InMemoryMemory
+from docking_tools import DockingTools
+
+
+def load_config(config_path: str = "config.yaml"):
+    with open(config_path, "r") as f:
+        return yaml.safe_load(f)
+
+
+def main():
+    config = load_config()
+    # 1. 注册工具
+    registry = ToolRegistry()
+    docking = DockingTools()
+    registry.register(docking.batch_docking)
+    registry.register(docking.get_top_affinity)
+    registry.register(docking.preprocess_structure)
+
+    # 2. 构建 Agent
+    agent = Agent(
+        planner="llm",               # 使用大模型规划者
+        tools=registry,
+        memory=InMemoryMemory(),
+        llm_provider=config["llm"]["provider"],
+        llm_model=config["llm"]["model"],
+        temperature=config["llm"]["temperature"],
+    )
+
+    # 3. 若不需要 CLI 可改为守护模式，此处演示单次执行
+    try:
+        # 示例：给定受体文件和配体文件列表
+        ctx = agent.run(
+            """
+            请对受体 receptor.pdbqt 和列表 ligands/ 下的所有配体执行批量对接，
+            并返回结合亲和力最高的 5 个配体结果。
+            """
+        )
+        print("对接任务完成。结果摘要：", ctx.output)
+    except Exception as e:
+        print(f"Agent 执行失败: {e}")
+
+
+if __name__ == "__main__":
+    main()
